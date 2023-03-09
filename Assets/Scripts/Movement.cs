@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float maxSpeed = 3f;
     [SerializeField] private float _maxSlideTime = 1f;
     [SerializeField] private float _jumpDistanceCheck = .9f;
+    [SerializeField] private float _slideReturnDistanceCheck = .9f;
     private float slideTimeCounter;
     private bool _isSliding;
     private RaycastHit hit;
@@ -56,7 +57,8 @@ public class Movement : MonoBehaviour
                 slideTimeCounter = 0;
             }
         }
-        else
+        else if(!Physics.BoxCast(transform.position, transform.localScale/2, transform.up, out hit,
+                    transform.rotation, _slideReturnDistanceCheck)) // Check if the player would get stuck if they exited slide
         {
             scale.y = 1f;
         }
