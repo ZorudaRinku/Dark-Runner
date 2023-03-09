@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float maxSpeed = 3f;
     [SerializeField] private float _maxSlideTime = 1f;
     [SerializeField] private float _jumpDistanceCheck = .9f;
+    [SerializeField] private float _slideReturnDistanceCheck = .9f;
     private float slideTimeCounter;
     private bool _isSliding;
     private RaycastHit hit;
@@ -56,7 +57,8 @@ public class Movement : MonoBehaviour
                 slideTimeCounter = 0;
             }
         }
-        else
+        else if(!Physics.BoxCast(transform.position, transform.localScale/2, transform.up, out hit,
+                    transform.rotation, _slideReturnDistanceCheck)) // Check if the player would get stuck if they exited slide
         {
             scale.y = 1f;
         }
@@ -80,20 +82,14 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidbody.AddForce(Vector3.right * speed, ForceMode.VelocityChange);
-        Vector3 velocity = _rigidbody.velocity;
-        velocity.x = Mathf.Clamp(_rigidbody.velocity.x, 0, maxSpeed); // Possibly slow the player down when they slide
-        _rigidbody.velocity = velocity;
-    }
-    
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-
-        //Draw a Ray forward from GameObject toward the hit
-        Gizmos.DrawRay(transform.position, Vector3.down * hit.distance);
-        //Draw a cube that extends to where the hit exists
-        Gizmos.DrawWireCube(transform.position + -transform.up * hit.distance, transform.localScale/2);
+        if (!_isSliding) // Don't accelerate if we're sliding
+        {
+            _rigidbody.AddForce(Vector3.right * speed, ForceMode.VelocityChange);
+            Vector3 velocity = _rigidbody.velocity;
+            velocity.x =
+                Mathf.Clamp(_rigidbody.velocity.x, 0, maxSpeed); // Possibly slow the player down when they slide
+            _rigidbody.velocity = velocity;
+        }
     }
 
     private bool GroundCheck()
