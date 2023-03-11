@@ -78,6 +78,9 @@ public class Movement : MonoBehaviour
         
         // Flip Gravity
         Physics.gravity = -Physics.gravity;
+
+        // Flip the players momentum
+        _rigidbody.velocity = -_rigidbody.velocity;
     }
 
     private void FixedUpdate()
