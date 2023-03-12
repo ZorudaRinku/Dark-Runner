@@ -15,6 +15,7 @@ public class Movement : MonoBehaviour
     private float slideTimeCounter;
     private bool _isSliding;
     private RaycastHit hit;
+    private bool slowed;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +68,16 @@ public class Movement : MonoBehaviour
             scale.y = 1f;
         }
         transform.localScale = scale;
+
+        if (slowed)
+        {
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 1, 1f * Time.deltaTime);
+            if (Time.timeScale > 0.98)
+            {
+                slowed = false;
+                Time.timeScale = 1;
+            }
+        }
     }
 
     private void flip()
@@ -87,6 +98,10 @@ public class Movement : MonoBehaviour
         var velocity = _rigidbody.velocity;
         velocity.y = -velocity.y;
         _rigidbody.velocity = velocity;
+
+        // Slow down time and begin lerping back to 1x time
+        Time.timeScale = 0.8f;
+        slowed = true;
     }
 
     private void FixedUpdate()
