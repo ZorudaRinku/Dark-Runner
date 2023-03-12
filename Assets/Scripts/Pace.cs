@@ -8,6 +8,7 @@ public class Pace : MonoBehaviour
 
     [SerializeField] private float accelerationAmount;
     [SerializeField] private float maxSpeed;
+    [SerializeField] private GameObject player;
 
     // Start is called before the first frame update
     void Start()
@@ -22,5 +23,9 @@ public class Pace : MonoBehaviour
         Vector3 velocity = _rigidbody.velocity;
         velocity.x = Mathf.Clamp( velocity.x, 0, maxSpeed);
         _rigidbody.velocity = velocity;
+
+        var position = transform.position;
+        position.y = player.transform.position.y;
+        transform.position = position;
     }
 }
