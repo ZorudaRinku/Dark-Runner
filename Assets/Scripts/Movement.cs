@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -9,6 +10,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _maxSlideTime = 1f;
     [SerializeField] private float _jumpDistanceCheck = .9f;
     [SerializeField] private float _slideReturnDistanceCheck = .9f;
+    [SerializeField] private GameObject _target;
+    private Rigidbody _targetRb;
     private float slideTimeCounter;
     private bool _isSliding;
     private RaycastHit hit;
@@ -17,6 +20,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _targetRb = _target.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -84,11 +88,20 @@ public class Movement : MonoBehaviour
     {
         if (!_isSliding) // Don't accelerate if we're sliding
         {
-            _rigidbody.AddForce(Vector3.right * speed, ForceMode.VelocityChange);
-            Vector3 velocity = _rigidbody.velocity;
-            velocity.x =
-                Mathf.Clamp(_rigidbody.velocity.x, 0, maxSpeed); // Possibly slow the player down when they slide
-            _rigidbody.velocity = velocity;
+            var distance = _target.transform.position.x - transform.position.x;
+            var vel = _rigidbody.velocity;
+            if (distance > 2f) // if distance to the box is >1, Accelerate
+            {
+                vel.x = Mathf.Lerp(vel.x, _targetRb.velocity.x * 1.2f, 3f * Time.deltaTime);
+            } else if (distance is < 2f and > 0) // if distance to the box is <1 && >0.1, decelerate
+            {
+                vel.x = Mathf.Lerp(vel.x, _targetRb.velocity.x * 1.02f, 0.5f * Time.deltaTime);
+            }
+            else // if distance to the box is < 0.5, hard set
+            {
+                vel.x = Mathf.Lerp(vel.x, _targetRb.velocity.x, 1f * Time.deltaTime);
+            }
+            _rigidbody.velocity = vel;
         }
     }
 
