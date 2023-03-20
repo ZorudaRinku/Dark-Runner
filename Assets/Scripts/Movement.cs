@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Movement : MonoBehaviour
 {
@@ -14,70 +15,53 @@ public class Movement : MonoBehaviour
     private Rigidbody _targetRb;
     private float slideTimeCounter;
     private bool _isSliding;
-    private RaycastHit hit;
     private bool slowed;
+    private bool flipped;
+    private RaycastHit hit;
 
     // Start is called before the first frame update
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _targetRb = _target.GetComponent<Rigidbody>();
+        flipped = false;
     }
 
-    // Update is called once per frame
+    
+    // Update is called once per frame, manages controls
     void Update()
     {
-        if (GroundCheck() && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))) // Jump
+        // jump using W or up arrow
+        if (GroundCheck() && ((!flipped && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))) || (flipped && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))))) // Jump
         {
             _rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             _isSliding = false;
         }
 
-        if (GroundCheck() && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || // Start Sliding
-                              Input.GetKeyDown(KeyCode.LeftShift)))
+        // start sliding 
+        if (GroundCheck() && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)))
         {
             _isSliding = true;
         }
 
-        if (GroundCheck() && (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S) || // Stop Sliding
-                              Input.GetKeyUp(KeyCode.LeftShift)))
+        // stop sliding 
+        if (GroundCheck() && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)))
         {
             _isSliding = false;
         }
 
+        // flip 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             flip();
+        }   
+
+        // Reload the scene
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetScene();
         }
 
-        
-        Vector3 scale = transform.localScale;
-        if (_isSliding)
-        {
-            scale.y = .5f;
-            slideTimeCounter += Time.deltaTime;
-            if (slideTimeCounter >= _maxSlideTime) // Interrupt the players slide after slideTime has been reached
-            {
-                _isSliding = false;
-                slideTimeCounter = 0;
-            }
-        }
-        else if(!Physics.BoxCast(transform.position, transform.localScale/2, transform.up, out hit,
-                    transform.rotation, _slideReturnDistanceCheck)) // Check if the player would get stuck if they exited slide
-        {
-            scale.y = 1f;
-        }
-        transform.localScale = scale;
-
-        if (slowed)
-        {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 1, 1f * Time.deltaTime);
-            if (Time.timeScale > 0.98)
-            {
-                slowed = false;
-                Time.timeScale = 1;
-            }
-        }
     }
 
     private void flip()
@@ -102,10 +86,41 @@ public class Movement : MonoBehaviour
         // Slow down time and begin lerping back to 1x time
         Time.timeScale = 0.8f;
         slowed = true;
+
+        // Flip value of flipped Boolean
+        flipped = !flipped;
     }
 
     private void FixedUpdate()
     {
+        Vector3 scale = transform.localScale;
+        if (_isSliding)
+        {
+            scale.y = .5f;
+            slideTimeCounter += Time.deltaTime;
+            if (slideTimeCounter >= _maxSlideTime) // Interrupt the players slide after slideTime has been reached
+            {
+                _isSliding = false;
+                slideTimeCounter = 0;
+            }
+        }
+        else if (!Physics.BoxCast(transform.position, transform.localScale / 2, transform.up, out hit,
+                    transform.rotation, _slideReturnDistanceCheck)) // Check if the player would get stuck if they exited slide
+        {
+            scale.y = 1f;
+        }
+        transform.localScale = scale;
+
+        if (slowed)
+        {
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 1, 1f * Time.deltaTime);
+            if (Time.timeScale > 0.98)
+            {
+                slowed = false;
+                Time.timeScale = 1;
+            }
+        }
+
         if (!_isSliding) // Don't accelerate if we're sliding
         {
             var distance = _target.transform.position.x - transform.position.x;
@@ -124,10 +139,16 @@ public class Movement : MonoBehaviour
             _rigidbody.velocity = vel;
         }
     }
-
+    
     private bool GroundCheck()
     {
         return Physics.BoxCast(transform.position, transform.localScale/2, -transform.up, out hit,
             transform.rotation, _jumpDistanceCheck);
+    }
+
+    // reloads the current scene
+    private void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
