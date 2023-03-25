@@ -30,6 +30,9 @@ public class CameraFollow : MonoBehaviour
         {
             position.y = Mathf.Lerp(position.y, target.transform.position.y/2, 4f * Time.deltaTime);
         }
+        
+        // Move position.z back based on the absolute of the playersCharacter y position
+        position.z = Mathf.Lerp(position.z, -Mathf.Abs(playerCharacter.transform.position.y), 4f * Time.deltaTime) - 2f;
 
         // Relates camera view to player object
         viewPosition = camera.WorldToViewportPoint(playerCharacter.transform.position);
