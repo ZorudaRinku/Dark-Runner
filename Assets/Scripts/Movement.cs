@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _jumpDistanceCheck = .9f;
     [SerializeField] private float _slideReturnDistanceCheck = .9f;
     [SerializeField] private GameObject _target;
+    private Vector3 horizontalForce;
     private Rigidbody _targetRb;
     private float slideTimeCounter;
     private bool _isSliding;
@@ -25,14 +26,14 @@ public class Movement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _targetRb = _target.GetComponent<Rigidbody>();
         flipped = false;
-    }
+    } // start
 
     
     // Update is called once per frame, manages controls
     void Update()
     {
         // jump using W or up arrow
-        if (GroundCheck() && ((!flipped && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))) || (flipped && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))))) // Jump
+        if (GroundCheck() && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))) // Jump
         {
             _rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             _isSliding = false;
@@ -43,12 +44,55 @@ public class Movement : MonoBehaviour
         {
             _isSliding = true;
         }
-
+        
         // stop sliding 
-        if (GroundCheck() && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)))
+        if (GroundCheck() && (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift)))
         {
             _isSliding = false;
         }
+
+        // check if it is flipped and change key functionality accordingly
+        
+
+        // move player right
+        if (GroundCheck() && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)))
+        {
+            // flip the direction that force is applied on horizontal axis
+            if (!flipped)
+            {
+                horizontalForce = transform.forward * speed;
+            }
+            else
+            {
+                horizontalForce = -transform.forward * speed;
+            }
+
+            // apply force calculation
+            _rigidbody.AddForce(horizontalForce, ForceMode.VelocityChange);
+
+        }
+
+        // move player left
+        if (GroundCheck() && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)))
+        {
+
+            // flip the direction that force is applied on horizontal axis
+            if (!flipped)
+            {
+                horizontalForce = -transform.forward * speed;
+            }
+            else
+            {
+                horizontalForce = transform.forward * speed;
+            }
+
+            // apply force calculation
+            _rigidbody.AddForce(horizontalForce, ForceMode.VelocityChange);
+            
+        }
+
+        // clamp player's speed 
+        _rigidbody.velocity = new Vector3(Mathf.Clamp(_rigidbody.velocity.x, -maxSpeed, maxSpeed), _rigidbody.velocity.y, _rigidbody.velocity.z);
 
         // flip 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -62,10 +106,11 @@ public class Movement : MonoBehaviour
             ResetScene();
         }
 
-    }
+    } // update
 
     private void flip()
     {
+
         // Flip players Y position
         Vector3 newPos = transform.position;
         newPos.Set(newPos.x, -newPos.y, newPos.z);
@@ -89,26 +134,34 @@ public class Movement : MonoBehaviour
 
         // Flip value of flipped Boolean
         flipped = !flipped;
-    }
+
+    } // flip
 
     private void FixedUpdate()
     {
+
         Vector3 scale = transform.localScale;
+
+        // set player's sliding state
         if (_isSliding)
         {
+
             scale.y = .5f;
             slideTimeCounter += Time.deltaTime;
+
             if (slideTimeCounter >= _maxSlideTime) // Interrupt the players slide after slideTime has been reached
             {
                 _isSliding = false;
                 slideTimeCounter = 0;
             }
+
         }
         else if (!Physics.BoxCast(transform.position, transform.localScale / 2, transform.up, out hit,
-                    transform.rotation, _slideReturnDistanceCheck)) // Check if the player would get stuck if they exited slide
+                transform.rotation, _slideReturnDistanceCheck)) // Check if the player would get stuck if they exited slide
         {
             scale.y = 1f;
         }
+
         transform.localScale = scale;
 
         if (slowed)
@@ -121,34 +174,19 @@ public class Movement : MonoBehaviour
             }
         }
 
-        if (!_isSliding) // Don't accelerate if we're sliding
-        {
-            var distance = _target.transform.position.x - transform.position.x;
-            var vel = _rigidbody.velocity;
-            if (distance > 2f) // if distance to the box is >1, Accelerate
-            {
-                vel.x = Mathf.Lerp(vel.x, _targetRb.velocity.x * 1.2f, 3f * Time.deltaTime);
-            } else if (distance is < 2f and > 0) // if distance to the box is <1 && >0.1, decelerate
-            {
-                vel.x = Mathf.Lerp(vel.x, _targetRb.velocity.x * 1.02f, 0.5f * Time.deltaTime);
-            }
-            else // if distance to the box is < 0.5, hard set
-            {
-                vel.x = Mathf.Lerp(vel.x, _targetRb.velocity.x, 1f * Time.deltaTime);
-            }
-            _rigidbody.velocity = vel;
-        }
-    }
+    } // FixedUpdate
     
+    // ...take a guess
     private bool GroundCheck()
     {
         return Physics.BoxCast(transform.position, transform.localScale/2, -transform.up, out hit,
             transform.rotation, _jumpDistanceCheck);
-    }
+    } // GroundCheck()
 
     // reloads the current scene
     private void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-}
+    } // ResetScene
+
+} // Movement
