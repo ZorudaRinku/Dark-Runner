@@ -32,7 +32,7 @@ public class CameraFollow : MonoBehaviour
         }
 
         // Relates camera view to player object
-        viewPosition = UnityEngine.Camera.main.WorldToViewportPoint(playerCharacter.transform.position);
+        viewPosition = camera.WorldToViewportPoint(playerCharacter.transform.position);
 
         // Checks if player is in camera view bounds
         if (viewPosition.x >= 0 && viewPosition.x <= 1 && viewPosition.y >= 0 && viewPosition.y <= 1 && viewPosition.z > 0)
