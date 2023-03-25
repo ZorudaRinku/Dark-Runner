@@ -30,9 +30,12 @@ public class CameraFollow : MonoBehaviour
         {
             position.y = Mathf.Lerp(position.y, target.transform.position.y/2, 4f * Time.deltaTime);
         }
+        
+        // Move position.z back based on the absolute of the playersCharacter y position
+        position.z = Mathf.Lerp(position.z, -Mathf.Abs(playerCharacter.transform.position.y), 4f * Time.deltaTime) - 2f;
 
         // Relates camera view to player object
-        viewPosition = UnityEngine.Camera.main.WorldToViewportPoint(playerCharacter.transform.position);
+        viewPosition = camera.WorldToViewportPoint(playerCharacter.transform.position);
 
         // Checks if player is in camera view bounds
         if (viewPosition.x >= 0 && viewPosition.x <= 1 && viewPosition.y >= 0 && viewPosition.y <= 1 && viewPosition.z > 0)
