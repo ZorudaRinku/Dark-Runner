@@ -26,6 +26,9 @@ public class Movement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _targetRb = _target.GetComponent<Rigidbody>();
         flipped = false;
+
+        // _rigidbody.GetComponent<Renderer>().material.color = Color.green;
+
     } // start
 
     
