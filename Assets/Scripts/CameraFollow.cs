@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -10,6 +9,8 @@ public class CameraFollow : MonoBehaviour
     private Camera camera;
     private Vector3 position;
     private Vector3 viewPosition;
+    public static event Action playerDead;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,12 +45,11 @@ public class CameraFollow : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not in view!");
+            playerDead?.Invoke();
         }
 
         position.x = target.transform.position.x + xOffset; 
         transform.position = position;
-
 
     }
 }
