@@ -182,8 +182,8 @@ public class Movement : MonoBehaviour
     // ...take a guess
     private bool GroundCheck()
     {
-        return Physics.BoxCast(transform.position, transform.localScale/2, -transform.up, out hit,
-            transform.rotation, _jumpDistanceCheck);
+        return Physics.CheckBox(transform.position - transform.TransformDirection(Vector3.up) * _jumpDistanceCheck / 2f, Vector3.one * 0.125f,
+            Quaternion.identity);
     } // GroundCheck()
 
     // reloads the current scene
