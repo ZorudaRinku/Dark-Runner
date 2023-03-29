@@ -113,7 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accelerationAmount: 2
   maxSpeed: 5
-  player: {fileID: 0}
+  player: {fileID: 4492883923165022526}
 --- !u!54 &190610330361097903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -228,8 +228,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 190610330361097900}
-  playerCharacter: {fileID: 0}
-  xOffset: 0
+  playerCharacter: {fileID: 4492883923165022526}
+  xOffset: 5
 --- !u!1 &190610330513398906
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,10 +369,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: a784d30bbab5b3b40a98c0aff6b4213e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.8383234
+  m_Radius: 1.3963826
   m_Height: 9.700118
   m_Direction: 1
-  m_Center: {x: -0, y: 4.6909842, z: 0}
+  m_Center: {x: 0, y: 4.6909842, z: 0}
 --- !u!114 &4401664794791332216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,10 +385,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6755e9c4f79d4c749aa3718035ed3528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.2
+  speed: 0.04
   jumpForce: 15
-  maxSpeed: 9
+  maxSpeed: 5
   _maxSlideTime: 1
   _jumpDistanceCheck: 1
   _slideReturnDistanceCheck: 0.9
   _target: {fileID: 190610330361097900}
+--- !u!95 &1103366858346929253
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4492883923165022526}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 247789e685d02a945beea1d85274ced1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
