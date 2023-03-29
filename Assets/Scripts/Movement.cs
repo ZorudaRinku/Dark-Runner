@@ -62,25 +62,20 @@ public class Movement : MonoBehaviour
 
         // move player right
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
             movementForce += transform.forward * speed;
-
-            _animator.SetBool("isRunning", true);
-        }
 
         // move player left
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
             movementForce += -transform.forward * speed;
-
-            _animator.SetBool("isRunning", true);
-        }
         
         // stop running animation
-        if (Mathf.Abs(_rigidbody.velocity.x) < 0.5)
+        if (Mathf.Abs(_rigidbody.velocity.x) > 0.8)
         {
-            _animator.SetBool("isRunning", false);
+            _animator.SetBool("isRunning", true);
+            _animator.SetFloat("speed", Mathf.Abs(_rigidbody.velocity.x) / maxSpeed);
         }
+        else
+            _animator.SetBool("isRunning", false);
 
         // clamp player's speed 
         _rigidbody.velocity = new Vector3(Mathf.Clamp(_rigidbody.velocity.x, -maxSpeed, maxSpeed), _rigidbody.velocity.y, _rigidbody.velocity.z);
