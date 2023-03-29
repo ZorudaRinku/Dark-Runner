@@ -21,6 +21,12 @@ public class Pace : MonoBehaviour
     {
         _rigidbody.AddForce(Vector3.right * accelerationAmount, ForceMode.Force);
         Vector3 velocity = _rigidbody.velocity;
+        
+        if (player.transform.position.x > transform.position.x + transform.localScale.x)
+            velocity.x = Mathf.Clamp( velocity.x, 0, maxSpeed * 1.2f);
+        else if (player.transform.position.x < transform.position.x - transform.localScale.x)
+            velocity.x = Mathf.Clamp( velocity.x, 0, maxSpeed * 0.8f);
+        
         velocity.x = Mathf.Clamp( velocity.x, 0, maxSpeed);
         _rigidbody.velocity = velocity;
 

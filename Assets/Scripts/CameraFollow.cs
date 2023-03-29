@@ -39,11 +39,7 @@ public class CameraFollow : MonoBehaviour
         viewPosition = camera.WorldToViewportPoint(playerCharacter.transform.position);
 
         // Checks if player is in camera view bounds
-        if (viewPosition.x >= 0 && viewPosition.x <= 1)
-        {
-            Debug.Log("Player Character is in view!");
-        }
-        else
+        if (viewPosition.x is <= 0 or >= 1)
         {
             playerDead?.Invoke();
         }
