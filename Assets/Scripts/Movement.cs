@@ -77,7 +77,7 @@ public class Movement : MonoBehaviour
         }
         
         // stop running animation
-        if (Mathf.Abs(_rigidbody.velocity.x) < 0.01)
+        if (Mathf.Abs(_rigidbody.velocity.x) < 0.5)
         {
             _animator.SetBool("isRunning", false);
         }
