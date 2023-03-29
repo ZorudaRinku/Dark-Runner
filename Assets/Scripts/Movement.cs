@@ -61,7 +61,7 @@ public class Movement : MonoBehaviour
         
 
         // move player right
-        if (GroundCheck() && (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)))
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             movementForce += transform.forward * speed;
 
@@ -69,7 +69,7 @@ public class Movement : MonoBehaviour
         }
 
         // move player left
-        if (GroundCheck() && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             movementForce += -transform.forward * speed;
 
