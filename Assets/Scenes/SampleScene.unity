@@ -2883,7 +2883,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4401664794791332216, guid: 8423c6cdaad7244439138dbf470ee663, type: 3}
       propertyPath: speed
-      value: 0.01
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 4401664794791332216, guid: 8423c6cdaad7244439138dbf470ee663, type: 3}
+      propertyPath: maxSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4401664794791332216, guid: 8423c6cdaad7244439138dbf470ee663, type: 3}
       propertyPath: jumpForce
