@@ -28,6 +28,7 @@ public class Movement : MonoBehaviour
         _targetRb = _target.GetComponent<Rigidbody>();
         flipped = false;
         _animator = GetComponent<Animator>();
+        Physics.gravity = -Mathf.Abs(Physics.gravity.y) * Vector3.up;
         // _rigidbody.GetComponent<Renderer>().material.color = Color.green;
 
     } // start
@@ -58,16 +59,7 @@ public class Movement : MonoBehaviour
         }
 
         // check if it is flipped and change key functionality accordingly
-        
 
-        // move player right
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            movementForce += transform.forward * speed;
-
-        // move player left
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            movementForce += -transform.forward * speed;
-        
         // stop running animation
         if (Mathf.Abs(_rigidbody.velocity.x) > 0.8)
         {
@@ -125,6 +117,22 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // move player right
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            movementForce += transform.forward * speed;
+
+            _animator.SetBool("isRunning", true);
+        }
+
+        // move player left
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            movementForce += -transform.forward * speed;
+
+            _animator.SetBool("isRunning", true);
+        }
+        
         _rigidbody.AddForce(movementForce, ForceMode.VelocityChange);
         movementForce = Vector3.zero;
 
