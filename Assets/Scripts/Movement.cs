@@ -72,7 +72,7 @@ public class Movement : MonoBehaviour
         if (Mathf.Abs(_rigidbody.velocity.x) > 0.8)
         {
             _animator.SetBool("isRunning", true);
-            _animator.SetFloat("speed", Mathf.Abs(_rigidbody.velocity.x) / maxSpeed);
+            _animator.SetFloat("speed", _rigidbody.velocity.x / maxSpeed);
         }
         else
             _animator.SetBool("isRunning", false);
