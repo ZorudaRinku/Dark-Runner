@@ -28,6 +28,7 @@ public class Movement : MonoBehaviour
         _targetRb = _target.GetComponent<Rigidbody>();
         flipped = false;
         _animator = GetComponent<Animator>();
+        Physics.gravity = -Mathf.Abs(Physics.gravity.y) * Vector3.up;
         // _rigidbody.GetComponent<Renderer>().material.color = Color.green;
 
     } // start
