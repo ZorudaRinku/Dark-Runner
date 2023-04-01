@@ -59,12 +59,15 @@ public class Movement : MonoBehaviour
         }
 
         // check if it is flipped and change key functionality accordingly
-        
+
         // stop running animation
-        if (Mathf.Abs(_rigidbody.velocity.x) < 0.5)
+        if (Mathf.Abs(_rigidbody.velocity.x) > 0.8)
         {
-            _animator.SetBool("isRunning", false);
+            _animator.SetBool("isRunning", true);
+            _animator.SetFloat("speed", _rigidbody.velocity.x / maxSpeed);
         }
+        else
+            _animator.SetBool("isRunning", false);
 
         // clamp player's speed 
         _rigidbody.velocity = new Vector3(Mathf.Clamp(_rigidbody.velocity.x, -maxSpeed, maxSpeed), _rigidbody.velocity.y, _rigidbody.velocity.z);

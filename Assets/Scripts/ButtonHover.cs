@@ -20,7 +20,7 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _buttonText.text = $"<color=white>{_originalText}</color>";
+        _buttonText.text = $"<color=black>{_originalText}</color>";
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
