@@ -60,23 +60,6 @@ public class Movement : MonoBehaviour
 
         // check if it is flipped and change key functionality accordingly
         
-
-        // move player right
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            movementForce += transform.forward * speed;
-
-            _animator.SetBool("isRunning", true);
-        }
-
-        // move player left
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            movementForce += -transform.forward * speed;
-
-            _animator.SetBool("isRunning", true);
-        }
-        
         // stop running animation
         if (Mathf.Abs(_rigidbody.velocity.x) < 0.5)
         {
@@ -131,6 +114,22 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // move player right
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            movementForce += transform.forward * speed;
+
+            _animator.SetBool("isRunning", true);
+        }
+
+        // move player left
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            movementForce += -transform.forward * speed;
+
+            _animator.SetBool("isRunning", true);
+        }
+        
         _rigidbody.AddForce(movementForce, ForceMode.VelocityChange);
         movementForce = Vector3.zero;
 
